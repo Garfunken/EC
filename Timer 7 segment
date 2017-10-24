@@ -5,8 +5,8 @@ _start:
 //Esto interrumpe cada segundo
 
         movia sp,0x7fffffc	//inicializa la pila
-        movia r2,0x10002000
-        addi r3,r0,0x02fa
+        movia r2,0x10002000	//activa el interval timer
+        addi r3,r0,0x02fa	//
         sthio r3, c(r2)
         addi r3,r0,0xf080
         sthio r3.8(r2)
