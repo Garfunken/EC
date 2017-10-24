@@ -50,7 +50,9 @@ handler:
         beq r2,r0,noint
         call timer	
 
-salir:	ldw r2,0(sp)
+salir: //recuperar r2,r3,r4,r5	
+
+	ldw r2,0(sp)
         ldw ra,4(sp)
         addi sp,sp,4 	
 
@@ -61,7 +63,7 @@ noint:	ldw et,0(sp)
 
 
 timer:	movia r2, 0x10002000
-	      stwio r0,0(r2)		//limpiar el TO
+	stwio r0,0(r2)		//limpiar el TO
 
 //guardar r2,r3,r4,r5
 
@@ -73,7 +75,7 @@ timer:	movia r2, 0x10002000
         stwio r4,0(r5)
         ret
 
-//recuperar r2,r3,r4,r5
+
 
 
 
