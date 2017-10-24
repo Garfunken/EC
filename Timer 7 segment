@@ -1,7 +1,10 @@
 .global _start
 
-_start: 	
-        movia sp,0x7fffffc	//Esto interrumpe cada segundo
+_start: 
+
+//Esto interrumpe cada segundo
+
+        movia sp,0x7fffffc	//inicializa la pila
         movia r2,0x10002000
         addi r3,r0,0x02fa
         sthio r3, c(r2)
