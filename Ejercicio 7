@@ -1,0 +1,116 @@
+Utilizando interrupciones, diseñar un programa ensamblador del NIOS II que
+encienda alternativamente, de uno en uno, todos los leds rojos de la placa DE2.
+Inicialmente, el movimiento de encendido será hacia la izquierda comenzando
+por el led rojo situado en la posición menos significativa. Cuando se pulse el
+botón KEY1 la dirección del movimiento cambiará hacia la derecha. Cuando se
+pulse el botón KEY2 la dirección de movimiento cambiará de nuevo hacia la
+izquierda.
+
+En el diseño del programa deben utilizarse dos tipos de interrupciones: las del
+temporizador y las del panel de botones. Por un lado, el temporizador será
+configurado para lanzar una interrupción periódicamente que indicará que
+debe realizarse un desplazamiento en los leds. Por otro lado, el panel de
+botones será configurado para lanzar una interrupción cuando se pulse un
+botón.
+
+*Inicializar la pila*
+*Habilitar las interrupciones de la botonera*
+*Habilitar las interrupciones del timer*
+*Habilitar las interrupciones del key1 y key2*
+*Habilitar las interrupciones del procesador
+
+
+.global _start
+
+_start:
+		      movia sp,0x7ffffc		//inicializamos la pila
+		      movia r2,0x10000050		//habilitamos los botones
+		      addi r3,r0,0b0110
+		      stwio r3,8(r2)			//iniciliazmos Key1 y Key2
+		      
+      
+		      movia r2,0x10002000		//habilitamos el timer
+		      addi r3,r0,0x02fa		//ponemos los 500000 segundos, en dos partes
+		      sthio r3, c(r2)			//hacemos el store Half, para la parte alta
+		      addi r3,r0,0xf080		//y hacemos lo mismo para la parte baja
+		      sthio r3,8(r2)
+		      addi r3,r0,0b0111		//le sumamos 1 a r3 y tenemos 0b0111 que nos permite
+		      sthio r2,r0,r3			//inicializar el star,count, y el ITO
+		      
+      
+		      addi r3,r0,0b0011		//Guardamos un 011 en r3 para inicilizar las
+		      wrctl ienable,r3		//interrupciones de la botonera y del timer
+		      addi r3,r0,1
+		      wrctl status,r3			//activamos las interrupciones del procesador
+
+pause:		br pause
+
+
+
+------------------------------------------------------------------------------
+guardar et en la pila
+leer el ipending en et
+si et = 0 es una interrupcion de las que no manejamos, KK
+si et != 0 corregimos ea
+		hacemos espacio en la pila para los registro usados
+		miramos de que tipo es la interrupcion que ha sucedido
+si es de la botonera
+si es del timer
+------------------------------------------------------------------------------
+
+
+
+.section.exception,"ax"
+
+handler:	subi sp,sp,4		//guardamos et en la pila
+		      stw et,0(sp)
+		      rdctl et,ipending	//traemos de un registro de control a uno de proposito
+					                   //general, para poder mirar su estado
+		      beq et,r0,fin		//si es una interrupcion de las que no tratamos vamos a fin
+		      subi ea,ea,4		//restamos 4 a ea para cuando volvamos a la rutina se ejecute la misma instruccion
+		      
+		      subi sp,sp,8		//le hacemos hueco en la pila a los registros
+		      stw r2,0(sp)		//usados
+		      stw ra,4(sp)
+      
+		      andi r2,et,0b010	//miramos que tipo de interrupcion se ha producido
+		      bne r2,r0, mybutton	//si es de la botonera vamos a mybutton
+		      andi r2,et,0b001	//miramos si es una interrupcion de las del timer
+		      beq r2,r0, termina
+		      call mytimer
+
+termina:	ldw r2,0(sp)		//recuperamos de la pila los registros usados
+          ldw ra,4(sp)
+          addi sp,sp,8
+
+fin:		  ldw et,0(sp)		//recuperamos et de la pila
+          addi sp,sp,4
+          eret
+------------------------------------------------------------------------------
+
+    timer: cargarlo hacer que itere cada segundo y que mueva los led's segun una direccion
+------------------------------------------------------------------------------
+
+mytimer:	movia r2,0x10002000
+		      stwio r0,0(r2)		//limpiamos para la siguiente vez
+		      movia r3,0x10000000
+		      
+      
+		      addi r4,r0,1
+		      slli r4,r4,1
+		      eret
+
+mybutton:	movia r2,0x10000020
+		      ldwio r4,0xc(r2)
+		      stwio r0,0xc(r2)
+      
+		      addi r5,r0,2
+		      beq r4,r5,button1
+      
+****slli r5,r5,1
+****beq r4,r5,button2
+		      
+		      br button2
+
+
+button1:	
