@@ -1,0 +1,24 @@
+.global _start
+
+_start:
+	movia r2,0x10000010
+	addi r3,r0,1
+	addi r5,r0,9
+	
+	
+on:	stwio r3,0(r2)
+	call mueve
+
+	bne r5,r0,on
+	addi r5,r0,9
+	addi r3,r0,1
+	br on
+
+mueve:	movia r4,500000
+mov:
+	addi r4,r4,-1
+	bne r4,r0, mov
+	subi r5,r5,1
+	slli r3,r3,1
+	ret
+.end	

@@ -1,0 +1,16 @@
+.global _start
+
+_start:
+			movia r2,0x10000000
+			movia r3,0x10000040
+		
+
+sliders:	ldwio r4,0(r3)
+			stwio r4,0(r2)
+		
+delay:		bne r5,r0,delay
+			call sliders
+
+stop:		br stop
+
+.end

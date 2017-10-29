@@ -1,0 +1,21 @@
+.global _start
+
+_start:
+		movia r2,0x10000020
+		addi r3,r0,0x3f
+		addi r5,r0,4
+		movia r4,500000
+
+show:	stwio r3,0(r2)
+		subi r4,r4,1
+		bne r4,r0,show		
+		
+		roli r3,r3,8
+		subi r5,r5,1
+		movia r4,500000
+		bne r5,r0,show
+
+		addi r3,r0,0x3f
+		call show
+
+stop:		br stop

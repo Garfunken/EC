@@ -1,0 +1,21 @@
+.global _start
+
+_start:		movia r2, 0x10000000 //inicializamos los led rojos
+		movia r4,0x00015555  //guardamos los pares
+		movia r5,0x0002aaaa  //guardamos los impares
+
+even:		stwio r5,0(r2)	     //mostramos los impares
+		call timer
+
+odd:		stwio r4,0(r2)	     //mostramos los pares
+		call timer
+		br even
+
+stop:		br stop
+
+timer:		movia r3,500000	     //cuando llamamos a timer inicializamos a 1 seg
+t:		addi r3,r3,-1	     //restamos 1 para ir haciendo la cuenta regresiva
+		bne r3,r0,t	     //si no son iguales saltamos a t que es la iteracion
+		ret
+
+.end
