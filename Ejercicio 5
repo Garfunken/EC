@@ -1,18 +1,3 @@
-Utilizando interrupciones, diseñar un programa ensamblador del NIOS II que
-encienda alternativamente, de uno en uno, todos los leds rojos de la placa DE2.
-Inicialmente, el movimiento de encendido será hacia la izquierda comenzando
-por el led rojo situado en la posición menos significativa. Cuando se pulse el
-botón KEY1 la dirección del movimiento cambiará hacia la derecha. Cuando se
-pulse el botón KEY2 la dirección de movimiento cambiará de nuevo hacia la
-izquierda.
-
-En el diseño del programa deben utilizarse dos tipos de interrupciones: las del
-temporizador y las del panel de botones. Por un lado, el temporizador será
-configurado para lanzar una interrupción periódicamente que indicará que
-debe realizarse un desplazamiento en los leds. Por otro lado, el panel de
-botones será configurado para lanzar una interrupción cuando se pulse un
-botón.
-
 *Inicializar la pila*
 *Habilitar las interrupciones de la botonera*
 *Habilitar las interrupciones del timer*
@@ -43,7 +28,7 @@ _start:
 		      addi r3,r0,1
 		      wrctl status,r3			//activamos las interrupciones del procesador
 
-pause:		br pause
+pause:		      br pause
 
 
 
@@ -62,7 +47,7 @@ si es del timer
 
 .section.exception,"ax"
 
-handler:	subi sp,sp,4		//guardamos et en la pila
+handler:	      subi sp,sp,4		//guardamos et en la pila
 		      stw et,0(sp)
 		      rdctl et,ipending	//traemos de un registro de control a uno de proposito
 					                   //general, para poder mirar su estado
@@ -79,13 +64,13 @@ handler:	subi sp,sp,4		//guardamos et en la pila
 		      beq r2,r0, termina
 		      call mytimer
 
-termina:	ldw r2,0(sp)		//recuperamos de la pila los registros usados
-          ldw ra,4(sp)
-          addi sp,sp,8
+termina:		ldw r2,0(sp)		//recuperamos de la pila los registros usados
+          		ldw ra,4(sp)
+          		addi sp,sp,8
 
-fin:		  ldw et,0(sp)		//recuperamos et de la pila
-          addi sp,sp,4
-          eret
+fin:			ldw et,0(sp)		//recuperamos et de la pila
+          	addi sp,sp,4
+          	eret
 ------------------------------------------------------------------------------
 
     timer: cargarlo hacer que itere cada segundo y que mueva los led's segun una direccion
