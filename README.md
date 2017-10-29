@@ -5,7 +5,7 @@ En este repositorio colgaré ejercicios de programas hechos en ensamblador
 
 ## Encuestas
 
-### Ejercicio 1
+### [I'm an inline-style link](https://github.com/Garfunken/EC/blob/master/Ejercicio%201.txt)
 
 Diseñar un programa ensamblador que encienda alternativamente todos los
 leds rojos en posiciones pares y todos los leds rojos en posiciones impares de la
