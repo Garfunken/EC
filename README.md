@@ -27,6 +27,8 @@ primer display "siete-segmentos" y lo rote por los cuatro primeros displays
 Diseñar un programa ensamblador que encienda en la placa DE2 los leds rojos
 correspondientes a los interruptores que no estén activados.
 
+## Interrupciones
+
 ### [Ejercicio 5](https://github.com/Garfunken/EC/blob/master/Ejercicio%205)
 
 Utilizando interrupciones, diseñar un programa ensamblador del NIOS II que
