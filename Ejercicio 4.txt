@@ -5,12 +5,10 @@ _start:
 		movia r3,0x10000040
 		
 
-sliders:	ldwio r4,0(r3)
+ini:		ldwio r4,0(r3)
+		xori r4,r4,0
 		stwio r4,0(r2)
 		
-delay:		bne r5,r0,delay
-		call sliders
-
-stop:		br stop
+		br ini
 
 .end
